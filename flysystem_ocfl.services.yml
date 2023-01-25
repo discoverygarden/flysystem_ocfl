@@ -1,0 +1,5 @@
+---
+services:
+  plugin.manager.ocfl_layout:
+    class: Drupal\flysystem_ocfl\OCFLLayoutManager
+    parent: default_plugin_manager

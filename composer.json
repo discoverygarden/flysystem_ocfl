@@ -1,3 +1,7 @@
 {
-  "name": "discoverygarden/flysystem_ocfl"
+    "name": "discoverygarden/flysystem_ocfl",
+    "type": "drupal-module",
+    "require": {
+        "drupal/flysystem": "^2"
+    }
 }
