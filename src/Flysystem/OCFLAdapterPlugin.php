@@ -75,7 +75,7 @@ class OCFLAdapterPlugin implements FlysystemPluginInterface, ContainerFactoryPlu
       return $issues;
     }
 
-    $namaste_tokens = glob("{$this->root}/0=ocfl_*", GLOB_NOSORT);
+    $namaste_tokens = glob("{$this->root}/0=ocfl_?.?", GLOB_NOSORT);
     $token_count = count($namaste_tokens);
     if ($token_count === 0) {
       $issues[] = "Failed to find namaste token for the OCFL root.";
@@ -92,7 +92,7 @@ class OCFLAdapterPlugin implements FlysystemPluginInterface, ContainerFactoryPlu
       throw new InvalidArgumentException("Missing 'root' configuration.");
     }
     return new static(
-      $container->get('flysystem_ocfl.layout_factory'),
+      $container->get('plugin.manager.flysystem_ocfl_layout'),
       $configuration['root'],
       $configuration['id_prefix']
     );

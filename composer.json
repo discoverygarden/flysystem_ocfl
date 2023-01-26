@@ -2,6 +2,7 @@
     "name": "discoverygarden/flysystem_ocfl",
     "type": "drupal-module",
     "require": {
+        "ext-json": "*",
         "drupal/flysystem": "^2"
     }
 }

@@ -1,5 +1,17 @@
 ---
 services:
-  plugin.manager.ocfl_layout:
+  plugin.manager.flysystem_ocfl_layout:
     class: Drupal\flysystem_ocfl\OCFLLayoutManager
     parent: default_plugin_manager
+  flysystem_ocfl.inventory_locator.base:
+    class: Drupal\flysystem_ocfl\EventSubscriber\BaseInventoryLocator
+    tags:
+      - name: event_subscriber
+  flysystem_ocfl.inventory_locator.mutable_head:
+    class: Drupal\flysystem_ocfl\EventSubscriber\MutableHeadInventoryLocator
+    tags:
+      - name: event_subscriber
+  flysystem_ocfl.resource_locator.fcrepo:
+    class: Drupal\flysystem_ocfl\EventSubscriber\FCRepoResourceLocator
+    tags:
+      - name: event_subscriber
