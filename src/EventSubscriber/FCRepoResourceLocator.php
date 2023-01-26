@@ -36,6 +36,7 @@ class FCRepoResourceLocator implements \Symfony\Component\EventDispatcher\EventS
     assert(array_key_exists('manifest', $inventory));
     assert(array_key_exists($hash, $inventory['manifest']));
     $relative_paths = $inventory['manifest'][$hash];
+    assert(count($relative_paths) === 1);
     $relative_path = reset($relative_paths);
     if ($relative_path === FALSE) {
       throw new \LogicException("Manifest contains hash referencing no names?");
