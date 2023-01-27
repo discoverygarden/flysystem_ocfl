@@ -24,11 +24,25 @@ class OCFL extends Local {
     parent::__construct($root);
   }
 
+  public function has($path) {
+    try {
+      $location = $this->applyPathPrefix($path);
+      return file_exists($location);
+    }
+    catch (UnknownObjectException $e) {
+      return FALSE;
+    }
+  }
+
   public function applyPathPrefix($path) {
     $object_id = "{$this->idPrefix}{$path}";
     $relative_object_path = $this->layout->mapToPath($object_id);
 
     $object_path = parent::applyPathPrefix($relative_object_path);
+    if (!is_dir($object_path)) {
+      // Does not appear to exist?
+      throw new UnknownObjectException("Could not find object for ID {$object_id} at path {$object_path}.");
+    }
     // TODO: Assert that we support whatever given version, in some way?
     assert(count(glob("{$object_path}/0=ocfl_object_?.?", GLOB_NOSORT)) === 1, "Found object Namaste tag.");
 
