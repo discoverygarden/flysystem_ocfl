@@ -14,6 +14,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class OCFL extends Local {
 
+  use ReadOnlyTrait;
+
   /**
    * The root storage path.
    *
