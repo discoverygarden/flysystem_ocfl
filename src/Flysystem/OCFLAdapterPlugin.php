@@ -36,10 +36,17 @@ class OCFLAdapterPlugin implements FlysystemPluginInterface, ContainerFactoryPlu
   protected string $idPrefix;
 
   /**
+   * OCFL layout factory service.
+   *
    * @var \Drupal\flysystem_ocfl\OCFLLayoutFactoryInterface
    */
   protected OCFLLayoutFactoryInterface $layoutFactory;
 
+  /**
+   * Event dispatcher service.
+   *
+   * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
+   */
   protected EventDispatcherInterface $eventDispatcher;
 
   /**
@@ -92,6 +99,9 @@ class OCFLAdapterPlugin implements FlysystemPluginInterface, ContainerFactoryPlu
     return $issues;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     if (!($configuration['root'] ?? FALSE)) {
       throw new \InvalidArgumentException("Missing 'root' configuration.");

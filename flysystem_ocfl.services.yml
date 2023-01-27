@@ -4,7 +4,7 @@ services:
     class: Drupal\flysystem_ocfl\OCFLLayoutManager
     parent: default_plugin_manager
   flysystem_ocfl.inventory_locator.base:
-    class: Drupal\flysystem_ocfl\EventSubscriber\BaseInventoryLocator
+    class: Drupal\flysystem_ocfl\EventSubscriber\BaseLocator
     tags:
       - name: event_subscriber
   flysystem_ocfl.inventory_locator.mutable_head:

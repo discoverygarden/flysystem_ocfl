@@ -9,13 +9,42 @@ use Drupal\flysystem_ocfl\OCFLLayoutInterface;
 use League\Flysystem\Adapter\Local;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
+/**
+ * OCFL flysystem adapter.
+ */
 class OCFL extends Local {
 
+  /**
+   * The root storage path.
+   *
+   * @var string
+   */
   protected string $root;
+
+  /**
+   * The storage layout implementation.
+   *
+   * @var \Drupal\flysystem_ocfl\OCFLLayoutInterface
+   */
   protected OCFLLayoutInterface $layout;
+
+  /**
+   * Prefix to append to IDs.
+   *
+   * @var string
+   */
   protected string $idPrefix;
+
+  /**
+   * Event dispatcher service.
+   *
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+   */
   protected EventDispatcherInterface $dispatcher;
 
+  /**
+   * Constructor.
+   */
   public function __construct($root, OCFLLayoutInterface $layout, EventDispatcherInterface $dispatcher, $id_prefix = '') {
     $this->root = $root;
     $this->layout = $layout;
@@ -24,6 +53,9 @@ class OCFL extends Local {
     parent::__construct($root);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   public function has($path) {
     try {
       $location = $this->applyPathPrefix($path);
@@ -34,6 +66,9 @@ class OCFL extends Local {
     }
   }
 
+  /**
+   * {@inheritDoc}
+   */
   public function applyPathPrefix($path) {
     $object_id = "{$this->idPrefix}{$path}";
     $relative_object_path = $this->layout->mapToPath($object_id);
@@ -43,10 +78,9 @@ class OCFL extends Local {
       // Does not appear to exist?
       throw new UnknownObjectException("Could not find object for ID {$object_id} at path {$object_path}.");
     }
-    // TODO: Assert that we support whatever given version, in some way?
+    // @todo Assert that we support whatever given version, in some way?
     assert(count(glob("{$object_path}/0=ocfl_object_?.?", GLOB_NOSORT)) === 1, "Found object Namaste tag.");
 
-    // TODO: Acquire appropriate inventory and find the file representing the current item.
     /** @var \Drupal\flysystem_ocfl\Event\OCFLInventoryLocationEvent $inventory_event */
     $inventory_event = $this->dispatcher->dispatch(new OCFLInventoryLocationEvent($object_path), OCFLEvents::INVENTORY_LOCATION);
 

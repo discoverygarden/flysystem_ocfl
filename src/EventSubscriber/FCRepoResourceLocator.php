@@ -6,12 +6,15 @@ use Drupal\flysystem_ocfl\Event\OCFLEvents;
 use Drupal\flysystem_ocfl\Event\OCFLResourceLocationEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
+/**
+ * Locate "root" resources from fcrepo.
+ */
 class FCRepoResourceLocator implements EventSubscriberInterface {
 
   const MANIFEST_NAME = '.fcrepo/fcr-root.json';
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   public static function getSubscribedEvents() : array {
     return [
@@ -19,6 +22,17 @@ class FCRepoResourceLocator implements EventSubscriberInterface {
     ];
   }
 
+  /**
+   * Helper; given a file name/relative path, get the hash of the resource.
+   *
+   * @param \Drupal\flysystem_ocfl\Event\OCFLResourceLocationEvent $event
+   *   The event being processed.
+   * @param string $name
+   *   The name for which to lookup the hash.
+   *
+   * @return string|false
+   *   The hash if found; otherwise, boolean FALSE.
+   */
   protected function getHashForName(OCFLResourceLocationEvent $event, string $name) {
     $inventory = $event->getInventory();
     assert(array_key_exists('head', $inventory));
@@ -33,6 +47,17 @@ class FCRepoResourceLocator implements EventSubscriberInterface {
     return FALSE;
   }
 
+  /**
+   * Helper; given a file hash, find the path.
+   *
+   * @param \Drupal\flysystem_ocfl\Event\OCFLResourceLocationEvent $event
+   *   The event to be processed.
+   * @param string $hash
+   *   The hash of the resource to lookup from the manifest in the inventory.
+   *
+   * @return string
+   *   The looked-up path.
+   */
   protected function getPathForHash(OCFLResourceLocationEvent $event, string $hash) : string {
     $inventory = $event->getInventory();
     assert(array_key_exists('manifest', $inventory));
@@ -48,21 +73,40 @@ class FCRepoResourceLocator implements EventSubscriberInterface {
     return $full_path;
   }
 
-  protected function getPathForName(OCFLResourceLocationEvent $event, string $name) {
+  /**
+   * Helper; given a resource name, lookup its full path.
+   *
+   * @param \Drupal\flysystem_ocfl\Event\OCFLResourceLocationEvent $event
+   *   The event baing processed.
+   * @param string $name
+   *   The name of the resource to lookup.
+   *
+   * @return string
+   *   The path to the resource.
+   */
+  protected function getPathForName(OCFLResourceLocationEvent $event, string $name) : string {
     $hash = $this->getHashForName($event, $name);
     assert($hash !== FALSE);
     return $this->getPathForHash($event, $hash);
   }
 
-  public function getResourceFromFcrepoManifest(OCFLResourceLocationEvent $event) {
+  /**
+   * Event callback; locate resource given an "fcr-root.json" being present.
+   *
+   * @param \Drupal\flysystem_ocfl\Event\OCFLResourceLocationEvent $event
+   *   The event being processed.
+   */
+  public function getResourceFromFcrepoManifest(OCFLResourceLocationEvent $event) : void {
     $fcrepo_manifest_hash = $this->getHashForName($event, static::MANIFEST_NAME);
     if ($fcrepo_manifest_hash === FALSE) {
-      dsm("failed to find fcrepo manifest for {$event->getObjectRoot()}");
       return;
     }
 
     $fcrepo_manifest = json_decode(file_get_contents($this->getPathForHash($event, $fcrepo_manifest_hash)), TRUE);
+    assert(array_key_exists('interactionModel', $fcrepo_manifest));
+    assert($fcrepo_manifest['interactionModel'] === 'http://www.w3.org/ns/ldp#NonRDFSource');
     assert(array_key_exists('contentPath', $fcrepo_manifest));
     $event->setResourcePath($this->getPathForName($event, $fcrepo_manifest['contentPath']));
   }
+
 }

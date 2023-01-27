@@ -9,12 +9,17 @@ use Drupal\flysystem_ocfl\OCFLLayoutInterface;
 /**
  * Map an ID according to extension 0004.
  *
+ * @see https://ocfl.github.io/extensions/0004-hashed-n-tuple-storage-layout.html
+ *
  * @OCFLLayout(
  *   id = "0004-hashed-n-tuple-storage-layout"
  * )
  */
 class HashedNTupleStorageLayout extends PluginBase implements OCFLLayoutInterface, ConfigurableInterface {
 
+  /**
+   * {@inheritDoc}
+   */
   public function mapToPath($id) : string {
     $hash = hash($this->configuration['digestAlgorithm'], $id);
 
@@ -29,14 +34,23 @@ class HashedNTupleStorageLayout extends PluginBase implements OCFLLayoutInterfac
     return implode('/', $parts);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   public function getConfiguration() : array {
     return $this->configuration;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   public function setConfiguration(array $configuration) : void {
     $this->configuration = $configuration;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   public function defaultConfiguration() : array {
     return [
       'digestAlgorithm' => 'sha256',
