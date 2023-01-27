@@ -2,9 +2,11 @@
 
 namespace Drupal\flysystem_ocfl\EventSubscriber;
 
-use Drupal\flysystem_ocfl\Flysystem\Adapter\OCFLEvents;
+use Drupal\flysystem_ocfl\Event\OCFLEvents;
+use Drupal\flysystem_ocfl\Event\OCFLResourceLocationEvent;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class FCRepoResourceLocator implements \Symfony\Component\EventDispatcher\EventSubscriberInterface {
+class FCRepoResourceLocator implements EventSubscriberInterface {
 
   const MANIFEST_NAME = '.fcrepo/fcr-root.json';
 
@@ -55,10 +57,11 @@ class FCRepoResourceLocator implements \Symfony\Component\EventDispatcher\EventS
   public function getResourceFromFcrepoManifest(OCFLResourceLocationEvent $event) {
     $fcrepo_manifest_hash = $this->getHashForName($event, static::MANIFEST_NAME);
     if ($fcrepo_manifest_hash === FALSE) {
+      dsm("failed to find fcrepo manifest for {$event->getObjectRoot()}");
       return;
     }
 
-    $fcrepo_manifest = json_decode(file_get_contents($this->getPathForHash($fcrepo_manifest_hash)), TRUE);
+    $fcrepo_manifest = json_decode(file_get_contents($this->getPathForHash($event, $fcrepo_manifest_hash)), TRUE);
     assert(array_key_exists('contentPath', $fcrepo_manifest));
     $event->setResourcePath($this->getPathForName($event, $fcrepo_manifest['contentPath']));
   }

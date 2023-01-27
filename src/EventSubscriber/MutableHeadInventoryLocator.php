@@ -2,8 +2,8 @@
 
 namespace Drupal\flysystem_ocfl\EventSubscriber;
 
+use Drupal\flysystem_ocfl\Event\OCFLEvents;
 use Drupal\flysystem_ocfl\Event\OCFLInventoryLocationEvent;
-use Drupal\flysystem_ocfl\Flysystem\Adapter\OCFLEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class MutableHeadInventoryLocator implements EventSubscriberInterface {
@@ -28,7 +28,7 @@ class MutableHeadInventoryLocator implements EventSubscriberInterface {
     elseif (!is_file($mutable_inventory)) {
       throw new \LogicException("Mutable head extension dir {$mutable_root} exists; however, failed to find its inventory.");
     }
-    $event->setInventoryByPath("{$event->getObjectPath()}/inventory.json");
+    $event->setInventoryByPath($mutable_inventory);
   }
 
 }

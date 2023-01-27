@@ -3,6 +3,7 @@
 namespace Drupal\flysystem_ocfl;
 
 use Drupal\Component\Plugin\Exception\PluginException;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\flysystem_ocfl\Annotation\OCFLLayout;
@@ -11,6 +12,7 @@ class OCFLLayoutManager extends DefaultPluginManager implements OCFLLayoutFactor
 
   public function __construct(
     \Traversable $namespaces,
+    CacheBackendInterface $cache_backend,
     ModuleHandlerInterface $module_handler
   ) {
     parent::__construct(
@@ -20,6 +22,9 @@ class OCFLLayoutManager extends DefaultPluginManager implements OCFLLayoutFactor
       OCFLLayoutInterface::class,
       OCFLLayout::class
     );
+
+    $this->alterInfo('flysystem_ocfl_layout_info');
+    $this->setCacheBackend($cache_backend, 'flysystem_ocfl_layout_plugins');
   }
 
   protected function getFromLayoutConfig(string $root) {

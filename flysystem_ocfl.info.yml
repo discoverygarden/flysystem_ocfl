@@ -1,0 +1,7 @@
+---
+name: Flysystem OCFL
+description: Flysystem adapter supporting reading from OCFL storages.
+type: module
+core_version_requirement: ^9
+dependencies:
+  - flysystem:flysystem

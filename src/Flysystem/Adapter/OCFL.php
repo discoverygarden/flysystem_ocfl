@@ -2,8 +2,9 @@
 
 namespace Drupal\flysystem_ocfl\Flysystem\Adapter;
 
+use Drupal\flysystem_ocfl\Event\OCFLEvents;
 use Drupal\flysystem_ocfl\Event\OCFLInventoryLocationEvent;
-use Drupal\flysystem_ocfl\EventSubscriber\OCFLResourceLocationEvent;
+use Drupal\flysystem_ocfl\Event\OCFLResourceLocationEvent;
 use Drupal\flysystem_ocfl\OCFLLayoutInterface;
 use League\Flysystem\Adapter\Local;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -35,7 +36,7 @@ class OCFL extends Local {
     /** @var \Drupal\flysystem_ocfl\Event\OCFLInventoryLocationEvent $inventory_event */
     $inventory_event = $this->dispatcher->dispatch(new OCFLInventoryLocationEvent($object_path), OCFLEvents::INVENTORY_LOCATION);
 
-    /** @var \Drupal\flysystem_ocfl\EventSubscriber\OCFLResourceLocationEvent $resource_event */
+    /** @var \Drupal\flysystem_ocfl\Event\OCFLResourceLocationEvent $resource_event */
     $resource_event = $this->dispatcher->dispatch(new OCFLResourceLocationEvent($object_path, $inventory_event->getInventory()), OCFLEvents::RESOURCE_LOCATION);
 
     return $resource_event->getResourcePath();

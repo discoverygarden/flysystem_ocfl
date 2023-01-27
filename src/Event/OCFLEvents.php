@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\flysystem_ocfl\Flysystem\Adapter;
+namespace Drupal\flysystem_ocfl\Event;
 
 interface OCFLEvents {
   const INVENTORY_LOCATION = 'flysystem_ocfl.inventory_location';

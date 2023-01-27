@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\flysystem_ocfl\EventSubscriber;
+namespace Drupal\flysystem_ocfl\Event;
 
 use Symfony\Contracts\EventDispatcher\Event;
 

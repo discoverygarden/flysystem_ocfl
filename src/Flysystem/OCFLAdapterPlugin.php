@@ -7,8 +7,8 @@ use Drupal\flysystem\Plugin\FlysystemPluginInterface;
 use Drupal\flysystem\Plugin\FlysystemUrlTrait;
 use Drupal\flysystem_ocfl\Flysystem\Adapter\OCFL;
 use Drupal\flysystem_ocfl\OCFLLayoutFactoryInterface;
-use http\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * OCFL adapter plugin.
@@ -40,15 +40,19 @@ class OCFLAdapterPlugin implements FlysystemPluginInterface, ContainerFactoryPlu
    */
   protected OCFLLayoutFactoryInterface $layoutFactory;
 
+  protected EventDispatcherInterface $eventDispatcher;
+
   /**
    * Constructor.
    */
   public function __construct(
     OCFLLayoutFactoryInterface $layoutFactory,
+    EventDispatcherInterface $event_dispatcher,
     string $root,
     string $id_prefix
   ) {
     $this->layoutFactory = $layoutFactory;
+    $this->eventDispatcher = $event_dispatcher;
     $this->root = $root;
     $this->idPrefix = $id_prefix;
   }
@@ -60,6 +64,7 @@ class OCFLAdapterPlugin implements FlysystemPluginInterface, ContainerFactoryPlu
     return new OCFL(
       $this->root,
       $this->layoutFactory->getLayout($this->root),
+      $this->eventDispatcher,
       $this->idPrefix
     );
   }
@@ -89,13 +94,15 @@ class OCFLAdapterPlugin implements FlysystemPluginInterface, ContainerFactoryPlu
 
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     if (!($configuration['root'] ?? FALSE)) {
-      throw new InvalidArgumentException("Missing 'root' configuration.");
+      throw new \InvalidArgumentException("Missing 'root' configuration.");
     }
     return new static(
       $container->get('plugin.manager.flysystem_ocfl_layout'),
+      $container->get('event_dispatcher'),
       $configuration['root'],
-      $configuration['id_prefix']
+      $configuration['id_prefix'] ?? ''
     );
+
   }
 
 }

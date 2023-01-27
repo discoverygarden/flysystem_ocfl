@@ -2,8 +2,9 @@
 
 namespace Drupal\flysystem_ocfl\EventSubscriber;
 
-use Drupal\flysystem_ocfl\Flysystem\Adapter\OCFLEvents;
-use Drupal\flysystem_ocfl\Flysystem\Adapter\OCFLInventoryLocationEvent;
+use Drupal\flysystem_ocfl\Event\OCFLEvents;
+use Drupal\flysystem_ocfl\Event\OCFLInventoryLocationEvent;
+use Drupal\flysystem_ocfl\Event\OCFLResourceLocationEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class BaseInventoryLocator implements EventSubscriberInterface {
