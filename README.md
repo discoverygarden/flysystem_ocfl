@@ -53,8 +53,6 @@ Hypothetically, this could even be chained with another Flysystem implementation
 }
 ```
 
-NOTE: The single slash on `your-desired-scheme:/` is intentional, as we expect to add a slash when concatenating additional path components.
-
 ### Configuration
 
 There are presently just two points of configuration for the `ocfl` driver:

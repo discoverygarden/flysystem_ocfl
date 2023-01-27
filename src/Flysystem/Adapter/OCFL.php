@@ -69,6 +69,24 @@ class OCFL extends Local {
   }
 
   /**
+   * Helper; find Namaste token in the given directory.
+   */
+  protected function findToken(string $object_path) {
+    $tokens = [
+      '0=ocfl_object_1.0',
+      '0=ocfl_object_1.1',
+    ];
+
+    foreach ($tokens as $token) {
+      if (file_exists("{$object_path}/{$token}")) {
+        return TRUE;
+      }
+    }
+
+    return FALSE;
+  }
+
+  /**
    * {@inheritDoc}
    */
   public function applyPathPrefix($path) {
@@ -80,8 +98,8 @@ class OCFL extends Local {
       // Does not appear to exist?
       throw new UnknownObjectException("Could not find object for ID {$object_id} at path {$object_path}.");
     }
-    // @todo Assert that we support whatever given version, in some way?
-    assert(count(glob("{$object_path}/0=ocfl_object_?.?", GLOB_NOSORT)) === 1, "Found object Namaste tag.");
+
+    assert($this->findToken($object_path) !== FALSE, "Found object Namaste tag.");
 
     /** @var \Drupal\flysystem_ocfl\Event\OCFLInventoryLocationEvent $inventory_event */
     $inventory_event = $this->dispatcher->dispatch(new OCFLInventoryLocationEvent($object_path), OCFLEvents::INVENTORY_LOCATION);

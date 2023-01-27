@@ -77,6 +77,24 @@ class OCFLAdapterPlugin implements FlysystemPluginInterface, ContainerFactoryPlu
   }
 
   /**
+   * Helper; find Namaste token in the given directory.
+   */
+  protected function findToken() {
+    $tokens = [
+      '0=ocfl_1.0',
+      '0=ocfl_1.1',
+    ];
+
+    foreach ($tokens as $token) {
+      if (file_exists("{$this->root}/{$token}")) {
+        return $token;
+      }
+    }
+
+    return FALSE;
+  }
+
+  /**
    * {@inheritDoc}
    */
   public function ensure($force = FALSE) : array {
@@ -87,13 +105,8 @@ class OCFLAdapterPlugin implements FlysystemPluginInterface, ContainerFactoryPlu
       return $issues;
     }
 
-    $namaste_tokens = glob("{$this->root}/0=ocfl_?.?", GLOB_NOSORT);
-    $token_count = count($namaste_tokens);
-    if ($token_count === 0) {
-      $issues[] = "Failed to find namaste token for the OCFL root.";
-    }
-    elseif ($token_count > 1) {
-      $issues[] = "Found too many namaste tokens for the OCFL root.";
+    if (!$this->findToken()) {
+      $issues[] = "Failed to find OCFL storage Namaste token.";
     }
 
     return $issues;
