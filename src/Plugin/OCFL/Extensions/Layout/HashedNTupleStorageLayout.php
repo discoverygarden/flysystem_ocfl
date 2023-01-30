@@ -2,10 +2,6 @@
 
 namespace Drupal\flysystem_ocfl\Plugin\OCFL\Extensions\Layout;
 
-use Drupal\Component\Plugin\ConfigurableInterface;
-use Drupal\Core\Plugin\PluginBase;
-use Drupal\flysystem_ocfl\OCFLLayoutInterface;
-
 /**
  * Map an ID according to extension 0004.
  *
@@ -15,49 +11,24 @@ use Drupal\flysystem_ocfl\OCFLLayoutInterface;
  *   id = "0004-hashed-n-tuple-storage-layout"
  * )
  */
-class HashedNTupleStorageLayout extends PluginBase implements OCFLLayoutInterface, ConfigurableInterface {
+class HashedNTupleStorageLayout extends AbstractHashedNTupleStorageLayout {
 
   /**
    * {@inheritDoc}
    */
-  public function mapToPath($id) : string {
-    $hash = hash($this->configuration['digestAlgorithm'], $id);
-
-    $parts = [];
-    for ($i = 0; $i < $this->configuration['numberOfTuples']; $i++) {
-      $parts[] = substr($hash, $i * $this->configuration['tupleSize'], $this->configuration['tupleSize']);
-    }
-    $parts[] = $this->configuration['shortObjectRoot'] ?
-      substr($hash, $this->configuration['tupleSize'] * $this->configuration['numberOfTuples']) :
-      $hash;
-
-    return implode('/', $parts);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public function getConfiguration() : array {
-    return $this->configuration;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public function setConfiguration(array $configuration) : void {
-    $this->configuration = $configuration;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public function defaultConfiguration() : array {
-    return [
-      'digestAlgorithm' => 'sha256',
-      'tupleSize' => 3,
-      'numberOfTuples' => 3,
+  public function defaultPluginConfiguration() : array {
+    return parent::defaultPluginConfiguration() + [
       'shortObjectRoot' => FALSE,
     ];
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  protected function getFinalPart(string $id, array $basis) : string {
+    return $this->configuration['shortObjectRoot'] ?
+      substr($basis['basis'], $this->configuration['tupleSize'] * $this->configuration['numberOfTuples']) :
+      $basis['basis'];
   }
 
 }
