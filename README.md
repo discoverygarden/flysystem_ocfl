@@ -46,12 +46,14 @@ Hypothetically, this could even be chained with another Flysystem implementation
   "fedora": {
     "driver": "ocfl",
     "config": {
-      "root": "your-desired-scheme://",
+      "root": "your-desired-scheme://ocfl-root",
       "id_prefix": "info:fedora/"
     }
   }
 }
 ```
+
+NOTE: An additional prefix within the bucket (`ocfl-root` in the example above, but could be anything) is presently necessary, due to [naive path normalization in Flysystem](https://github.com/thephpleague/flysystem/blob/3239285c825c152bcc315fe0e87d6b55f5972ed1/src/Adapter/AbstractAdapter.php#L49-L59).
 
 ### Configuration
 
@@ -69,5 +71,5 @@ Not strictly an issue with this module, but may rise relating to the use of non-
 
 ## Future Thoughts
 
-- allow for fragments to be passed via Flysystem, to be interpreted as different resources within an object
+- allow for fragments to be passed via Flysystem URIs, to be interpreted as different resources within a container object
   - no present use-case for this
