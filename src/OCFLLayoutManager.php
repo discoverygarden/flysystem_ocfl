@@ -57,10 +57,31 @@ class OCFLLayoutManager extends DefaultPluginManager implements OCFLLayoutFactor
   }
 
   /**
+   * Do the heavy-lifting of building a layout.
+   *
+   * @param string $root
+   *   The root for which to build a layout.
+   *
+   * @return \Drupal\flysystem_ocfl\OCFLLayoutInterface|false
+   *   The built layout.
+   */
+  protected function doGetLayout(string $root) : OCFLLayoutInterface {
+    if ($layout = $this->getFromLayoutConfig($root)) {
+      return $layout;
+    }
+    return FALSE;
+  }
+
+  /**
    * {@inheritDoc}
    */
   public function getLayout(string $root) : OCFLLayoutInterface {
+    $cache_id = "flysystem_ocfl_layout:$root";
+    if ($item = $this->cacheBackend->get($cache_id)) {
+      return $item->data;
+    }
     if ($layout = $this->getFromLayoutConfig($root)) {
+      $this->cacheBackend->set($cache_id, $layout);
       return $layout;
     }
 

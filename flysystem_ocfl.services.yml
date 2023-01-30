@@ -1,5 +1,11 @@
 ---
 services:
+  cache.flysystem_ocfl_location:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - name: cache.bin
+    factory: ['@cache_factory', 'get']
+    arguments: ['flysystem_ocfl_location']
   plugin.manager.flysystem_ocfl_layout:
     class: Drupal\flysystem_ocfl\OCFLLayoutManager
     parent: default_plugin_manager

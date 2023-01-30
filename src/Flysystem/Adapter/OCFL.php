@@ -2,6 +2,7 @@
 
 namespace Drupal\flysystem_ocfl\Flysystem\Adapter;
 
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\flysystem_ocfl\Event\OCFLEvents;
 use Drupal\flysystem_ocfl\Event\OCFLInventoryLocationEvent;
 use Drupal\flysystem_ocfl\Event\OCFLResourceLocationEvent;
@@ -45,14 +46,45 @@ class OCFL extends Local {
   protected EventDispatcherInterface $dispatcher;
 
   /**
+   * Cache mapped paths.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected CacheBackendInterface $cacheBackend;
+
+  /**
    * Constructor.
    */
-  public function __construct($root, OCFLLayoutInterface $layout, EventDispatcherInterface $dispatcher, $id_prefix = '') {
+  public function __construct(string $root, OCFLLayoutInterface $layout, EventDispatcherInterface $dispatcher, CacheBackendInterface $cache, string $id_prefix = '') {
     $this->root = $root;
     $this->layout = $layout;
+    $this->cacheBackend = $cache;
     $this->idPrefix = $id_prefix;
     $this->dispatcher = $dispatcher;
     parent::__construct($root);
+  }
+
+  /**
+   * Static factory method.
+   *
+   * @param string $root
+   *   The root of the OCFL storage.
+   * @param string $id_prefix
+   *   Prefix to prepend to incoming IDs.
+   *
+   * @return static
+   *   The adapter instance.
+   */
+  public static function createInstance(string $root, string $id_prefix = '') {
+    /** @var \Drupal\flysystem_ocfl\OCFLLayoutFactoryInterface $layout_factory */
+    $layout_factory = \Drupal::service('plugin.manager.flysystem_ocfl_layout');
+    return new static(
+      $root,
+      $layout_factory->getLayout($root),
+      \Drupal::service('event_dispatcher'),
+      \Drupal::service('cache.flysystem_ocfl_location'),
+      $id_prefix
+    );
   }
 
   /**
@@ -79,7 +111,7 @@ class OCFL extends Local {
 
     foreach ($tokens as $token) {
       if (file_exists("{$object_path}/{$token}")) {
-        return TRUE;
+        return $token;
       }
     }
 
@@ -90,6 +122,12 @@ class OCFL extends Local {
    * {@inheritDoc}
    */
   public function applyPathPrefix($path) {
+    $cache_id = "{$this->root}:{$path}";
+    if ($item = $this->cacheBackend->get($cache_id)) {
+      assert(file_exists($item->data));
+      return $item->data;
+    }
+
     $object_id = "{$this->idPrefix}{$path}";
     $relative_object_path = $this->layout->mapToPath($object_id);
 
@@ -107,7 +145,10 @@ class OCFL extends Local {
     /** @var \Drupal\flysystem_ocfl\Event\OCFLResourceLocationEvent $resource_event */
     $resource_event = $this->dispatcher->dispatch(new OCFLResourceLocationEvent($object_path, $inventory_event->getInventory()), OCFLEvents::RESOURCE_LOCATION);
 
-    return $resource_event->getResourcePath();
+    $resource_path = $resource_event->getResourcePath();
+    $this->cacheBackend->set($cache_id, $resource_path);
+
+    return $resource_path;
   }
 
 }

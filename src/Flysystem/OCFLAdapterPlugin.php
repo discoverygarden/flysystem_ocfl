@@ -6,9 +6,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\flysystem\Plugin\FlysystemPluginInterface;
 use Drupal\flysystem\Plugin\FlysystemUrlTrait;
 use Drupal\flysystem_ocfl\Flysystem\Adapter\OCFL;
-use Drupal\flysystem_ocfl\OCFLLayoutFactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * OCFL adapter plugin.
@@ -36,30 +34,12 @@ class OCFLAdapterPlugin implements FlysystemPluginInterface, ContainerFactoryPlu
   protected string $idPrefix;
 
   /**
-   * OCFL layout factory service.
-   *
-   * @var \Drupal\flysystem_ocfl\OCFLLayoutFactoryInterface
-   */
-  protected OCFLLayoutFactoryInterface $layoutFactory;
-
-  /**
-   * Event dispatcher service.
-   *
-   * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
-   */
-  protected EventDispatcherInterface $eventDispatcher;
-
-  /**
    * Constructor.
    */
   public function __construct(
-    OCFLLayoutFactoryInterface $layoutFactory,
-    EventDispatcherInterface $event_dispatcher,
     string $root,
     string $id_prefix
   ) {
-    $this->layoutFactory = $layoutFactory;
-    $this->eventDispatcher = $event_dispatcher;
     $this->root = $root;
     $this->idPrefix = $id_prefix;
   }
@@ -68,12 +48,7 @@ class OCFLAdapterPlugin implements FlysystemPluginInterface, ContainerFactoryPlu
    * {@inheritDoc}
    */
   public function getAdapter() {
-    return new OCFL(
-      $this->root,
-      $this->layoutFactory->getLayout($this->root),
-      $this->eventDispatcher,
-      $this->idPrefix
-    );
+    return OCFL::createInstance($this->root, $this->idPrefix);
   }
 
   /**
@@ -120,8 +95,6 @@ class OCFLAdapterPlugin implements FlysystemPluginInterface, ContainerFactoryPlu
       throw new \InvalidArgumentException("Missing 'root' configuration.");
     }
     return new static(
-      $container->get('plugin.manager.flysystem_ocfl_layout'),
-      $container->get('event_dispatcher'),
       $configuration['root'],
       $configuration['id_prefix'] ?? ''
     );
