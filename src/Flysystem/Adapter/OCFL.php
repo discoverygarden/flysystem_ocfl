@@ -122,7 +122,7 @@ class OCFL extends Local {
    * {@inheritDoc}
    */
   public function applyPathPrefix($path) {
-    $cache_id = "{$this->root}:{$path}";
+    $cache_id = "flysystem_ocfl:mapped:{$this->root}:{$path}";
     if ($item = $this->cacheBackend->get($cache_id)) {
       assert(file_exists($item->data));
       return $item->data;

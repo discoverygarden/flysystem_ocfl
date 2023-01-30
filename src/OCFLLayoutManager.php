@@ -53,7 +53,11 @@ class OCFLLayoutManager extends DefaultPluginManager implements OCFLLayoutFactor
     $extension = $layout_config['extension'];
     $extension_config_path = "{$root}/extensions/{$extension}/config.json";
     assert(file_exists($extension_config_path));
-    return $this->createInstance($extension, json_decode(file_get_contents($extension_config_path), TRUE));
+
+    return $this->createInstance(
+      $extension,
+      json_decode(file_get_contents($extension_config_path), TRUE)
+    );
   }
 
   /**
@@ -65,7 +69,7 @@ class OCFLLayoutManager extends DefaultPluginManager implements OCFLLayoutFactor
    * @return \Drupal\flysystem_ocfl\OCFLLayoutInterface|false
    *   The built layout.
    */
-  protected function doGetLayout(string $root) : OCFLLayoutInterface {
+  protected function doGetLayout(string $root) {
     if ($layout = $this->getFromLayoutConfig($root)) {
       return $layout;
     }
@@ -76,11 +80,11 @@ class OCFLLayoutManager extends DefaultPluginManager implements OCFLLayoutFactor
    * {@inheritDoc}
    */
   public function getLayout(string $root) : OCFLLayoutInterface {
-    $cache_id = "flysystem_ocfl_layout:$root";
+    $cache_id = "flysystem_ocfl:layout:$root";
     if ($item = $this->cacheBackend->get($cache_id)) {
       return $item->data;
     }
-    if ($layout = $this->getFromLayoutConfig($root)) {
+    if ($layout = $this->doGetLayout($root)) {
       $this->cacheBackend->set($cache_id, $layout);
       return $layout;
     }
