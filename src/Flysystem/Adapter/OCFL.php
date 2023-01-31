@@ -102,16 +102,20 @@ class OCFL extends Local {
 
   /**
    * Helper; find Namaste token in the given directory.
+   *
+   * @see https://ocfl.io/1.0/spec/#object-conformance-declaration
    */
   protected function findToken(string $object_path) {
-    $tokens = [
-      '0=ocfl_object_1.0',
-      '0=ocfl_object_1.1',
+    $dvalues = [
+      'ocfl_object_1.0',
+      'ocfl_object_1.1',
     ];
 
-    foreach ($tokens as $token) {
-      if (file_exists("{$object_path}/{$token}")) {
-        return $token;
+    foreach ($dvalues as $dvalue) {
+      $token = "0={$dvalue}";
+      $path = "{$object_path}/{$token}";
+      if (file_exists($path) && file_get_contents($path) === "{$dvalue}\n") {
+        return $dvalue;
       }
     }
 

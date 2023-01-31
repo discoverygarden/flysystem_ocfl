@@ -53,16 +53,20 @@ class OCFLAdapterPlugin implements FlysystemPluginInterface, ContainerFactoryPlu
 
   /**
    * Helper; find Namaste token in the given directory.
+   *
+   * @see https://ocfl.io/1.0/spec/#root-conformance-declaration
    */
   protected function findToken() {
-    $tokens = [
-      '0=ocfl_1.0',
-      '0=ocfl_1.1',
+    $dvalues = [
+      'ocfl_1.0',
+      'ocfl_1.1',
     ];
 
-    foreach ($tokens as $token) {
-      if (file_exists("{$this->root}/{$token}")) {
-        return $token;
+    foreach ($dvalues as $dvalue) {
+      $token = "0=$dvalue";
+      $path = "{$this->root}/{$token}";
+      if (file_exists($path) && file_get_contents($path) == "{$dvalue}\n") {
+        return $dvalue;
       }
     }
 
