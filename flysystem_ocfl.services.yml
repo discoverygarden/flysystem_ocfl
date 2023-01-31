@@ -1,0 +1,23 @@
+---
+services:
+  cache.flysystem_ocfl_location:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - name: cache.bin
+    factory: ['@cache_factory', 'get']
+    arguments: ['flysystem_ocfl_location']
+  plugin.manager.flysystem_ocfl_layout:
+    class: Drupal\flysystem_ocfl\OCFLLayoutManager
+    parent: default_plugin_manager
+  flysystem_ocfl.inventory_locator.base:
+    class: Drupal\flysystem_ocfl\EventSubscriber\BaseLocator
+    tags:
+      - name: event_subscriber
+  flysystem_ocfl.inventory_locator.mutable_head:
+    class: Drupal\flysystem_ocfl\EventSubscriber\MutableHeadInventoryLocator
+    tags:
+      - name: event_subscriber
+  flysystem_ocfl.resource_locator.fcrepo:
+    class: Drupal\flysystem_ocfl\EventSubscriber\FCRepoResourceLocator
+    tags:
+      - name: event_subscriber
