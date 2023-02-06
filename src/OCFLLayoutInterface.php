@@ -14,7 +14,7 @@ interface OCFLLayoutInterface {
    *   The object ID to lookup.
    *
    * @return string
-   *   The resolved path.
+   *   The resolved path, relative to the OCFL root.
    */
   public function mapToPath(string $id) : string;
 
