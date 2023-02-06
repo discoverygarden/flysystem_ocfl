@@ -17,8 +17,8 @@ class HashedTruncatedNTupleTreesWithObjectIDEncapsulatingDirectoryLayout extends
    * {@inheritDoc}
    */
   protected function getFinalPart(string $id, array $basis) : string {
-    $replaced = mb_ereg_replace_callback('/[^A-Za-z0-9-_]/g', [$this, 'encoder'], $id);
-    return substr($replaced, 100);
+    $replaced = preg_replace_callback('/[^A-Za-z0-9-_]/', [$this, 'encoder'], $id);
+    return substr($replaced, 0, 100);
   }
 
   /**
@@ -48,16 +48,11 @@ class HashedTruncatedNTupleTreesWithObjectIDEncapsulatingDirectoryLayout extends
 
     // Spec indicates it has to be lower-cased.
     $hex = strtolower(dechex($ord));
-    $exploded = explode('', $hex);
-    if ((count($exploded) & 1) === 1) {
-      $exploded = array_merge([0], $exploded);
+    if (strlen($hex) & 1) {
+      $hex = "0{$hex}";
     }
-    $sliced = array_chunk($exploded, 2);
-    $to_return = [];
-    foreach ($sliced as $slice) {
-      $to_return[] = "%{$slice[0]}{$slice[1]}";
-    }
-    return implode('', $to_return);
+
+    return '%' . implode('%', str_split($hex,2));
   }
 
 }

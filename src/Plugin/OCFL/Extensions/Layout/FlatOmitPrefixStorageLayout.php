@@ -31,7 +31,12 @@ class FlatOmitPrefixStorageLayout extends PluginBase implements OCFLLayoutInterf
    * {@inheritDoc}
    */
   public function mapToPath(string $id) : string {
-    $sliced = substr($id, strrpos($id, $this->configuration['delimiter']));
+    $pos = strrpos($id, $this->configuration['delimiter']);
+    if ($pos === FALSE) {
+      return $id;
+    }
+
+    $sliced = substr($id, $pos + strlen($this->configuration['delimiter']));
 
     if (strlen($sliced) === 0) {
       throw new \InvalidArgumentException("Got zero-length path with delimiter '{$this->configuration['delimiter']}' in ID '{$id}'.");
