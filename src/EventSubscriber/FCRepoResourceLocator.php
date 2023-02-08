@@ -35,6 +35,7 @@ class FCRepoResourceLocator implements EventSubscriberInterface {
    */
   protected function getHashForName(OCFLResourceLocationEvent $event, string $name) {
     $inventory = $event->getInventory();
+
     assert(array_key_exists('head', $inventory));
     $head = $inventory['head'];
     assert(array_key_exists($head, $inventory['versions']));
@@ -60,16 +61,16 @@ class FCRepoResourceLocator implements EventSubscriberInterface {
    */
   protected function getPathForHash(OCFLResourceLocationEvent $event, string $hash) : string {
     $inventory = $event->getInventory();
-    assert(array_key_exists('manifest', $inventory));
-    assert(array_key_exists($hash, $inventory['manifest']));
+    assert(array_key_exists('manifest', $inventory), 'Inventory contains manifest.');
+    assert(array_key_exists($hash, $inventory['manifest']), 'Manifest contains hash.');
     $relative_paths = $inventory['manifest'][$hash];
-    assert(count($relative_paths) === 1);
+    assert(count($relative_paths) === 1, 'Only one path found.');
     $relative_path = reset($relative_paths);
     if ($relative_path === FALSE) {
       throw new \LogicException("Manifest contains hash referencing no names?");
     }
     $full_path = "{$event->getObjectRoot()}/{$relative_path}";
-    assert(file_exists($full_path));
+    assert(file_exists($full_path), "Resolved file ({$full_path}) exists.");
     return $full_path;
   }
 

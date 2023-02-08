@@ -17,8 +17,10 @@ class HashedTruncatedNTupleTreesWithObjectIDEncapsulatingDirectoryLayout extends
    * {@inheritDoc}
    */
   protected function getFinalPart(string $id, array $basis) : string {
-    $replaced = preg_replace_callback('/[^A-Za-z0-9-_]/', [$this, 'encoder'], $id);
-    return substr($replaced, 0, 100);
+    $replaced = mb_ereg_replace_callback('[^A-Za-z0-9-_]', [$this, 'encoder'], $id);
+    return strlen($replaced) > 100 ?
+      substr($replaced, 0, 100) . "-{$basis['basis']}" :
+      $replaced;
   }
 
   /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\flysystem_ocfl\Unit;
+namespace Drupal\Tests\flysystem_ocfl\Unit\Plugin\OCFL\Extensions\Layout;
 
 use Drupal\flysystem_ocfl\Plugin\OCFL\Extensions\Layout\HashedTruncatedNTupleTreesWithObjectIDEncapsulatingDirectoryLayout;
 use Drupal\Tests\UnitTestCase;
@@ -62,6 +62,12 @@ class HashedTruncatedNTupleTreesWithObjectIDEncapsulatingDirectoryLayoutTest ext
     return [
       [$config, 'object-01', 'object-01'],
       [$config, '..hor/rib:le-$id', '%2e%2ehor%2frib%3ale-%24id'],
+      [$config, mb_convert_encoding('..Hor/rib:lè-$id', 'UTF-8', 'ISO-8859-1'), '%2e%2eHor%2frib%3al%c3%a8-%24id'],
+      [
+        $config,
+        'abcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghija',
+        'abcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij-5cc73e648fbcff136510e330871180922ddacf193b68fdeff855683a01464220',
+      ],
     ];
   }
 

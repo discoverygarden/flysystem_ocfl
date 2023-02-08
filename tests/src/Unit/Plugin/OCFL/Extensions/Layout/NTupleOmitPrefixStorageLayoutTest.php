@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\flysystem_ocfl\Unit;
+namespace Drupal\Tests\flysystem_ocfl\Unit\Plugin\OCFL\Extensions\Layout;
 
 use Drupal\flysystem_ocfl\Plugin\OCFL\Extensions\Layout\NTupleOmitPrefixStorageLayout;
 use Drupal\Tests\UnitTestCase;

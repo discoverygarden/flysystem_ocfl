@@ -2,7 +2,6 @@
 
 namespace Drupal\flysystem_ocfl\Plugin\OCFL\Extensions\Layout;
 
-use Drupal\Component\Plugin\ConfigurableInterface;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\flysystem_ocfl\OCFLLayoutInterface;
 

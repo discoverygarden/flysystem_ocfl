@@ -155,4 +155,20 @@ class OCFL extends Local {
     return $resource_path;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public function getVisibility($path) {
+    $result = parent::getVisibility($path);
+
+    if (in_array($result['visibility'], ['public', 'private'])) {
+      return $result;
+    }
+    else {
+      return [
+          'visibility' => 'private',
+        ] + $result;
+    }
+  }
+
 }

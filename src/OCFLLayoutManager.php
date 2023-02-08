@@ -7,6 +7,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\flysystem_ocfl\Annotation\OCFLLayout;
+use Drupal\flysystem_ocfl\Plugin\OCFL\Extensions\Layout\ConfigurableInterface;
 
 /**
  * OCFL layout manager/factory.
@@ -51,13 +52,8 @@ class OCFLLayoutManager extends DefaultPluginManager implements OCFLLayoutFactor
     $layout_config = json_decode(file_get_contents($layout), TRUE);
     assert(array_key_exists('extension', $layout_config));
     $extension = $layout_config['extension'];
-    $extension_config_path = "{$root}/extensions/{$extension}/config.json";
-    assert(file_exists($extension_config_path));
 
-    return $this->createInstance(
-      $extension,
-      json_decode(file_get_contents($extension_config_path), TRUE)
-    );
+    return $this->createInstance($extension);
   }
 
   /**
@@ -85,6 +81,9 @@ class OCFLLayoutManager extends DefaultPluginManager implements OCFLLayoutFactor
       return $item->data;
     }
     if ($layout = $this->doGetLayout($root)) {
+      if ($layout instanceof ConfigurableInterface) {
+        $layout->loadConfiguration($root);
+      }
       $this->cacheBackend->set($cache_id, $layout);
       return $layout;
     }
