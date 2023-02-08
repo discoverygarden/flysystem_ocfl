@@ -72,9 +72,16 @@ jobs:
           apt update
           apt install -y postgresql-client git
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+      - name: Cache Composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: /tmp/composer-cache
+          key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
       - name: Misc setup
         working-directory: ${{ env.DRUPAL_ROOT }}
+        env:
+          COMPOSER_HOME: /tmp/composer-cache
         run: |
           set -eux
 
