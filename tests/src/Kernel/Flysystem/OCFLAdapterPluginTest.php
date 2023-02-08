@@ -5,7 +5,7 @@ namespace Drupal\Tests\flysystem_ocfl\Kernel\Flysystem;
 use Drupal\Core\File\FileSystem;
 use Drupal\Core\StreamWrapper\StreamWrapperInterface;
 use Drupal\flysystem_ocfl\Flysystem\OCFLAdapterPlugin;
-use Drupal\Tests\token\Kernel\KernelTestBase;
+use Drupal\KernelTests\KernelTestBase;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 
