@@ -76,6 +76,9 @@ class OCFLInventoryLocationEvent extends Event {
    *   The inventory.
    */
   public function getInventory() : array {
+    if (!isset($this->inventory)) {
+      throw new \LogicException('Attempted to get inventory without it having been set.');
+    }
     return $this->inventory;
   }
 
