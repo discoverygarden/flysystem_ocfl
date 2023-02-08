@@ -6,7 +6,7 @@ use Drupal\Component\Plugin\Exception\PluginException;
 use Drupal\flysystem_ocfl\OCFLLayoutInterface;
 use Drupal\flysystem_ocfl\Plugin\OCFL\Extensions\Layout\FlatDirectStorageLayout;
 use Drupal\flysystem_ocfl\Plugin\OCFL\Extensions\Layout\HashedTruncatedNTupleTreesWithObjectIDEncapsulatingDirectoryLayout;
-use Drupal\Tests\token\Kernel\KernelTestBase;
+use Drupal\KernelTests\KernelTestBase;
 use org\bovigo\vfs\vfsStream;
 
 /**
