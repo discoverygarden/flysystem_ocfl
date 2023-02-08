@@ -70,14 +70,21 @@ jobs:
           # postgresql-client required for drush's site installation process
           # git required to grab repo as repo via actions/checkout
           apt update
-          apt install -y postgresql-client git
+          apt install -y postgresql-client git jq
       - name: Checkout Repo
         uses: actions/checkout@v3
+      - name: Get project hash
+        id: composer-project-hash
+        working-directory: ${{ env.DRUPAL_ROOT }}
+        run: |
+          set -eux
+          HASH=$(jq --raw-output ".[\"content-hash\"]" < composer.lock)
+          echo "HASH=$HASH" >> $GITHUB_OUTPUT
       - name: Cache Composer dependencies
         uses: actions/cache@v2
         with:
           path: /tmp/composer-cache
-          key: ${{ runner.os }}-${{ hashFiles(join([${{ env.DRUPAL_ROOT }}, '**/composer.lock'], '/')) }}
+          key: ${{ runner.os }}-${{ steps.composer-project-hash.outputs.HASH }}
       - name: Misc setup
         working-directory: ${{ env.DRUPAL_ROOT }}
         env:
