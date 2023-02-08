@@ -21,7 +21,7 @@ class FlatOmitPrefixStorageLayoutTest extends UnitTestCase {
    * @dataProvider exampleTwoDataProvider
    * @dataProvider exampleThreeDataProvider
    */
-  public function testMapToPath(array $config, string $id, string $expected) {
+  public function testMapToPath(array $config, string $id, string $expected) : void {
     $instance = new FlatOmitPrefixStorageLayout($config, '', []);
     $this->assertEquals($expected, $instance->mapToPath($id));
   }
@@ -31,7 +31,7 @@ class FlatOmitPrefixStorageLayoutTest extends UnitTestCase {
    *
    * @see https://ocfl.github.io/extensions/0006-flat-omit-prefix-storage-layout.html#example-1
    */
-  public function exampleOneDataProvider() {
+  public function exampleOneDataProvider() : array {
     $config = [
       'extensionName' => '0006-flat-omit-prefix-storage-layout',
       'delimiter' => ':',
@@ -52,7 +52,7 @@ class FlatOmitPrefixStorageLayoutTest extends UnitTestCase {
    *
    * @see https://ocfl.github.io/extensions/0006-flat-omit-prefix-storage-layout.html#example-2
    */
-  public function exampleTwoDataProvider() {
+  public function exampleTwoDataProvider() : array {
     $config = [
       'extensionName' => '0006-flat-omit-prefix-storage-layout',
       'delimiter' => 'edu/',
@@ -69,7 +69,7 @@ class FlatOmitPrefixStorageLayoutTest extends UnitTestCase {
    *
    * @see https://ocfl.github.io/extensions/0006-flat-omit-prefix-storage-layout.html#example-3
    */
-  public function exampleThreeDataProvider() {
+  public function exampleThreeDataProvider() : array {
     $config = [
       'extensionName' => '0006-flat-omit-prefix-storage-layout',
       'delimiter' => 'info:',

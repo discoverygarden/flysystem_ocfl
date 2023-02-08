@@ -26,7 +26,7 @@ class MutableHeadInventoryLocatorTest extends UnitTestCase {
   /**
    * {@inheritDoc}
    */
-  protected function setUp() {
+  protected function setUp() : void {
     parent::setUp();
 
     $this->locator = new MutableHeadInventoryLocator();
@@ -35,7 +35,7 @@ class MutableHeadInventoryLocatorTest extends UnitTestCase {
   /**
    * Test successful identification of the inventory.
    */
-  public function testSuccess() {
+  public function testSuccess() : void {
     $root = vfsStream::setup('root', NULL, [
       'extensions' => [
         '0005-mutable-head' => [
@@ -61,7 +61,7 @@ class MutableHeadInventoryLocatorTest extends UnitTestCase {
   /**
    * Test error condition of extension directory being present, with 'head' dir.
    */
-  public function testMissingInventoryButHead() {
+  public function testMissingInventoryButHead() : void {
     $root = vfsStream::setup('root', NULL, [
       'extensions' => [
         '0005-mutable-head' => [
@@ -107,7 +107,7 @@ class MutableHeadInventoryLocatorTest extends UnitTestCase {
   /**
    * Test that evaluation skips out when not present.
    */
-  public function testNotMutableHead() {
+  public function testNotMutableHead() : void {
     $root = vfsStream::setup('root', NULL, []);
 
     $mock_event = $this->createMock(OCFLInventoryLocationEvent::class);

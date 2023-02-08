@@ -62,7 +62,7 @@ class FCRepoResourceLocatorTest extends UnitTestCase {
   /**
    * {@inheritDoc}
    */
-  protected function setUp() {
+  protected function setUp() : void {
     parent::setUp();
 
     $this->locator = new FCRepoResourceLocator();
@@ -90,7 +90,7 @@ class FCRepoResourceLocatorTest extends UnitTestCase {
   /**
    * Test successful use of manifests.
    */
-  public function testSuccessfulManifestLookup() {
+  public function testSuccessfulManifestLookup() : void {
     vfsStream::create(array_merge_recursive($this->objectRootStructure, [
       'v1' => [
         'content' => [
@@ -141,7 +141,7 @@ class FCRepoResourceLocatorTest extends UnitTestCase {
   /**
    * Test that not being present leads to skipping out.
    */
-  public function testNoManifest() {
+  public function testNoManifest() : void {
     $this->mockEvent->expects($this->never())
       ->method('setResourcePath')
       ->with($this->anything());

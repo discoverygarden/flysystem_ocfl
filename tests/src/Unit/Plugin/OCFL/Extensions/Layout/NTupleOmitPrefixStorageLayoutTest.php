@@ -20,7 +20,7 @@ class NTupleOmitPrefixStorageLayoutTest extends UnitTestCase {
    * @dataProvider exampleOneDataProvider
    * @dataProvider exampleTwoDataProvider
    */
-  public function testMapToPath(array $config, string $id, string $expected) {
+  public function testMapToPath(array $config, string $id, string $expected) : void {
     $instance = new NTupleOmitPrefixStorageLayout($config, '', []);
     $this->assertEquals($expected, $instance->mapToPath($id));
   }
@@ -30,7 +30,7 @@ class NTupleOmitPrefixStorageLayoutTest extends UnitTestCase {
    *
    * @see https://ocfl.github.io/extensions/0007-n-tuple-omit-prefix-storage-layout.html#example-1
    */
-  public function exampleOneDataProvider() {
+  public function exampleOneDataProvider() : array {
     $config = [
       'extensionName' => '0007-n-tuple-omit-prefix-storage-layout',
       'delimiter' => ':',
@@ -56,7 +56,7 @@ class NTupleOmitPrefixStorageLayoutTest extends UnitTestCase {
    *
    * @see https://ocfl.github.io/extensions/0007-n-tuple-omit-prefix-storage-layout.html#example-2
    */
-  public function exampleTwoDataProvider() {
+  public function exampleTwoDataProvider() : array {
     $config = [
       'extensionName' => '0007-n-tuple-omit-prefix-storage-layout',
       'delimiter' => 'edu/',

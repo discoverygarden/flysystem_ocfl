@@ -21,7 +21,7 @@ class HashedTruncatedNTupleTreesWithObjectIDEncapsulatingDirectoryLayoutTest ext
    * @dataProvider exampleTwoDataProvider
    * @dataProvider exampleThreeDataProvider
    */
-  public function testMapToPath(array $config, string $id, string $expected) {
+  public function testMapToPath(array $config, string $id, string $expected) : void {
     $instance = new HashedTruncatedNTupleTreesWithObjectIDEncapsulatingDirectoryLayout($config, '', []);
     $this->assertEquals($expected, $instance->mapToPath($id));
   }
@@ -31,7 +31,7 @@ class HashedTruncatedNTupleTreesWithObjectIDEncapsulatingDirectoryLayoutTest ext
    *
    * @see https://ocfl.github.io/extensions/0003-hash-and-id-n-tuple-storage-layout.html#example-1
    */
-  public function exampleOneDataProvider() {
+  public function exampleOneDataProvider() : array {
     $config = [
       'extensionName' => '0003-hash-and-id-n-tuple-storage-layout',
       'digestAlgorithm' => 'sha256',
@@ -50,7 +50,7 @@ class HashedTruncatedNTupleTreesWithObjectIDEncapsulatingDirectoryLayoutTest ext
    *
    * @see https://ocfl.github.io/extensions/0003-hash-and-id-n-tuple-storage-layout.html#example-2
    */
-  public function exampleTwoDataProvider() {
+  public function exampleTwoDataProvider() : array {
     $config = [
       'extensionName' => '0003-hash-and-id-n-tuple-storage-layout',
       'digestAlgorithm' => 'md5',
@@ -78,7 +78,7 @@ class HashedTruncatedNTupleTreesWithObjectIDEncapsulatingDirectoryLayoutTest ext
    * @see https://ocfl.github.io/extensions/0003-hash-and-id-n-tuple-storage-layout.html#example-3
    * @see https://ocfl.github.io/extensions/0003-hash-and-id-n-tuple-storage-layout.html#encapsulation-directory
    */
-  public function exampleThreeDataProvider() {
+  public function exampleThreeDataProvider() : array {
     $config = [
       'extensionName' => '0003-hash-and-id-n-tuple-storage-layout',
       'digestAlgorithm' => 'sha256',

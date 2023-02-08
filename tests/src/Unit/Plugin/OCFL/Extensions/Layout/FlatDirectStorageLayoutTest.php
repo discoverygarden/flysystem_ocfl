@@ -19,7 +19,7 @@ class FlatDirectStorageLayoutTest extends UnitTestCase {
    *
    * @dataProvider dataProvider
    */
-  public function testMapToPath(array $config, string $id, string $expected) {
+  public function testMapToPath(array $config, string $id, string $expected) : void {
     $instance = new FlatDirectStorageLayout($config, '', []);
     $this->assertEquals($expected, $instance->mapToPath($id));
   }
@@ -31,7 +31,7 @@ class FlatDirectStorageLayoutTest extends UnitTestCase {
    *
    * @see https://ocfl.github.io/extensions/0002-flat-direct-storage-layout.html#example-1
    */
-  public function dataProvider() {
+  public function dataProvider() : array {
     $config = [
       'extensionName' => '0002-flat-direct-storage-layout',
     ];

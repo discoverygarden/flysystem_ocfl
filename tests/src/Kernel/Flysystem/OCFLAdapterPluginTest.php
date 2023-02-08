@@ -78,7 +78,7 @@ class OCFLAdapterPluginTest extends KernelTestBase {
   /**
    * Test attempt to instantiate without a "root" specified.
    */
-  public function testMissingRoot() {
+  public function testMissingRoot() : void {
     $this->expectException(\InvalidArgumentException::class);
     OCFLAdapterPlugin::create($this->container, [], '', []);
   }
@@ -86,7 +86,7 @@ class OCFLAdapterPluginTest extends KernelTestBase {
   /**
    * Test error state.
    */
-  public function testUnknownResourceResolution() {
+  public function testUnknownResourceResolution() : void {
     $this->ocflRoot = vfsStream::create([
       'silly-object-id' => [
         '0=ocfl_object_1.0' => "ocfl_object_1.0\n",
@@ -106,7 +106,7 @@ class OCFLAdapterPluginTest extends KernelTestBase {
     $this->expectWarning();
     $this->expectWarningMessage('Unknown resource structure.');
     $this->expectWarningMessageMatches('/^Unknown resource structure\\./');
-    file_exists("{$this->scheme}://silly-object-id");
+    $this->assertFalse(file_exists("{$this->scheme}://silly-object-id"), 'The file does not exist.');
   }
 
   /**
@@ -114,7 +114,7 @@ class OCFLAdapterPluginTest extends KernelTestBase {
    *
    * @see https://wiki.lyrasis.org/display/FEDORA6x/Fedora+OCFL+Object+Structure
    */
-  public function testKnownResourceResolution() {
+  public function testKnownResourceResolution() : void {
     $test_value = $this->randomMachineName();
     $this->ocflRoot = vfsStream::create([
       'object-02' => [
@@ -167,7 +167,7 @@ class OCFLAdapterPluginTest extends KernelTestBase {
    * @see https://ocfl.github.io/extensions/0005-mutable-head.html
    * @see https://wiki.lyrasis.org/display/FEDORA6x/Fedora+OCFL+Object+Structure
    */
-  public function testKnownResourceViaMutableHeadResolution() {
+  public function testKnownResourceViaMutableHeadResolution() : void {
     $test_value = $this->randomMachineName();
     $test_value2 = $this->randomMachineName();
     vfsStream::create([

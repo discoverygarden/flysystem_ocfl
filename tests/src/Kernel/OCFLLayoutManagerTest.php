@@ -27,7 +27,7 @@ class OCFLLayoutManagerTest extends KernelTestBase {
   /**
    * Test that we return a PluginException when there is no `ocfl_layout.json`.
    */
-  public function testMissingLayout() {
+  public function testMissingLayout() : void {
     $this->expectException(PluginException::class);
     /** @var \Drupal\flysystem_ocfl\OCFLLayoutFactoryInterface $manager */
     $manager = $this->container->get('plugin.manager.flysystem_ocfl_layout');
@@ -46,7 +46,7 @@ class OCFLLayoutManagerTest extends KernelTestBase {
    *
    * @dataProvider dataProvider
    */
-  public function testLayoutLoad(array $structure, string $class, string $id, string $path) {
+  public function testLayoutLoad(array $structure, string $class, string $id, string $path) : void {
     /** @var \Drupal\flysystem_ocfl\OCFLLayoutFactoryInterface $manager */
     $manager = $this->container->get('plugin.manager.flysystem_ocfl_layout');
 
@@ -71,7 +71,7 @@ class OCFLLayoutManagerTest extends KernelTestBase {
    *   - a string representing an ID to map
    *   - a string representing the path to which the ID should map.
    */
-  public function dataProvider() {
+  public function dataProvider() : array {
     return [
       [
         // Base test.

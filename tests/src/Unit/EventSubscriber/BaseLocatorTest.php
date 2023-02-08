@@ -24,7 +24,7 @@ class BaseLocatorTest extends UnitTestCase {
   /**
    * {@inheritDoc}
    */
-  protected function setUp() {
+  protected function setUp() : void {
     parent::setUp();
 
     $this->baseLocator = new BaseLocator();
@@ -33,7 +33,7 @@ class BaseLocatorTest extends UnitTestCase {
   /**
    * Test setting of path based on object path.
    */
-  public function testInventoryResponse() {
+  public function testInventoryResponse() : void {
     $mock_object_path = $this->randomMachineName();
     $mock_event = $this->createMock(OCFLInventoryLocationEvent::class);
     $mock_event->expects($this->atLeastOnce())
@@ -49,7 +49,7 @@ class BaseLocatorTest extends UnitTestCase {
   /**
    * Test exception throwing with unknown resource lookup method.
    */
-  public function testResourceResponse() {
+  public function testResourceResponse() : void {
     $this->expectException(\LogicException::class);
     $mock_event = $this->createMock(OCFLResourceLocationEvent::class);
     $this->baseLocator->resourceNotFound($mock_event);

@@ -21,7 +21,7 @@ class HashedNTupleStorageLayoutTest extends UnitTestCase {
    * @dataProvider exampleTwoDataProvider
    * @dataProvider exampleThreeDataProvider
    */
-  public function testMapToPath(array $config, string $id, string $expected) {
+  public function testMapToPath(array $config, string $id, string $expected) : void {
     $instance = new HashedNTupleStorageLayout($config, '', []);
     $this->assertEquals($expected, $instance->mapToPath($id));
   }
@@ -31,7 +31,7 @@ class HashedNTupleStorageLayoutTest extends UnitTestCase {
    *
    * @see https://ocfl.github.io/extensions/0004-hashed-n-tuple-storage-layout.html#example-1
    */
-  public function exampleOneDataProvider() {
+  public function exampleOneDataProvider() : array {
     $config = [
       'extensionName' => '0004-hashed-n-tuple-storage-layout',
       'digestAlgorithm' => 'sha256',
@@ -59,7 +59,7 @@ class HashedNTupleStorageLayoutTest extends UnitTestCase {
    *
    * @see https://ocfl.github.io/extensions/0004-hashed-n-tuple-storage-layout.html#example-2
    */
-  public function exampleTwoDataProvider() {
+  public function exampleTwoDataProvider() : array {
     $config = [
       'extensionName' => '0004-hashed-n-tuple-storage-layout',
       'digestAlgorithm' => 'md5',
@@ -87,7 +87,7 @@ class HashedNTupleStorageLayoutTest extends UnitTestCase {
    *
    * @see https://ocfl.github.io/extensions/0004-hashed-n-tuple-storage-layout.html#example-3
    */
-  public function exampleThreeDataProvider() {
+  public function exampleThreeDataProvider() : array {
     $config = [
       'extensionName' => '0004-hashed-n-tuple-storage-layout',
       'digestAlgorithm' => 'sha256',
