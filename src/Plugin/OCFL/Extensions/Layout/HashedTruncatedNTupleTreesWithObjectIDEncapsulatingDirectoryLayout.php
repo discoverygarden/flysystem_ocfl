@@ -54,7 +54,7 @@ class HashedTruncatedNTupleTreesWithObjectIDEncapsulatingDirectoryLayout extends
       $hex = "0{$hex}";
     }
 
-    return '%' . implode('%', str_split($hex,2));
+    return '%' . implode('%', str_split($hex, 2));
   }
 
 }

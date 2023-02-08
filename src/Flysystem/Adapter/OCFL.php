@@ -166,8 +166,8 @@ class OCFL extends Local {
     }
     else {
       return [
-          'visibility' => 'private',
-        ] + $result;
+        'visibility' => 'private',
+      ] + $result;
     }
   }
 
