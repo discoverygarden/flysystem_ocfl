@@ -5,6 +5,11 @@ namespace Drupal\Tests\flysystem_ocfl\Unit\Plugin\OCFL\Extensions\Layout;
 use Drupal\flysystem_ocfl\Plugin\OCFL\Extensions\Layout\NTupleOmitPrefixStorageLayout;
 use Drupal\Tests\UnitTestCase;
 
+/**
+ * Test ID to path mapping for extension 0007.
+ *
+ * @see https://ocfl.github.io/extensions/0007-n-tuple-omit-prefix-storage-layout.html
+ */
 class NTupleOmitPrefixStorageLayoutTest extends UnitTestCase {
 
   /**
@@ -19,8 +24,9 @@ class NTupleOmitPrefixStorageLayoutTest extends UnitTestCase {
   }
 
   /**
-   * @return array[]
-   *   Data provider for testing.
+   * Data provider for "example one".
+   *
+   * @see https://ocfl.github.io/extensions/0007-n-tuple-omit-prefix-storage-layout.html#example-1
    */
   public function exampleOneDataProvider() {
     $config = [
@@ -34,11 +40,20 @@ class NTupleOmitPrefixStorageLayoutTest extends UnitTestCase {
 
     return [
       [$config, 'namespace:12887296', '6927/8821/12887296'],
-      [$config, 'urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66', '66a9/c002/6e8bc430-9c3a-11d9-9669-0800200c9a66'],
+      [
+        $config,
+        'urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66',
+        '66a9/c002/6e8bc430-9c3a-11d9-9669-0800200c9a66',
+      ],
       [$config, 'abc123', '321c/ba00/abc123'],
     ];
   }
 
+  /**
+   * Data provider for "example two".
+   *
+   * @see https://ocfl.github.io/extensions/0007-n-tuple-omit-prefix-storage-layout.html#example-2
+   */
   public function exampleTwoDataProvider() {
     $config = [
       'extensionName' => '0007-n-tuple-omit-prefix-storage-layout',

@@ -2,37 +2,49 @@
 
 namespace Drupal\Tests\flysystem_ocfl\Kernel\Flysystem;
 
-use Drupal\Core\DependencyInjection\Compiler\RegisterStreamWrappersPass;
-use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\File\FileSystem;
-use Drupal\Core\File\FileSystemInterface;
-use Drupal\Core\Site\Settings;
 use Drupal\Core\StreamWrapper\StreamWrapperInterface;
-use Drupal\flysystem\FlysystemServiceProvider;
-use Drupal\flysystem_ocfl\Flysystem\Adapter\UnknownObjectException;
 use Drupal\flysystem_ocfl\Flysystem\OCFLAdapterPlugin;
 use Drupal\Tests\token\Kernel\KernelTestBase;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
-use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 
+/**
+ * Test out adapter plugin instantiation.
+ */
 class OCFLAdapterPluginTest extends KernelTestBase {
 
+  /**
+   * {@inheritDoc}
+   */
   protected static $modules = [
     'flysystem',
     'flysystem_ocfl',
   ];
 
-  protected vfsStreamDirectory $_vfsRoot;
+  /**
+   * Generated OCFL root VFS directory structure.
+   *
+   * @var \org\bovigo\vfs\vfsStreamDirectory
+   */
+  protected vfsStreamDirectory $ocflRoot;
+
+  /**
+   * Flysystem/Stream-wrapper scheme as which to register.
+   *
+   * @var string
+   */
   protected string $scheme;
 
+  /**
+   * {@inheritDoc}
+   */
   public function setUp() : void {
     parent::setUp();
 
-    vfsStream::enableDotfiles();
-    $this->_vfsRoot = vfsStream::setup(
+    $this->ocflRoot = vfsStream::setup(
       'root',
-      NULL, //FileSystem::CHMOD_FILE,
+      FileSystem::CHMOD_FILE,
       [
         'ocfl_layout.json' => json_encode([
           'extension' => '0002-flat-direct-storage-layout',
@@ -45,7 +57,7 @@ class OCFLAdapterPluginTest extends KernelTestBase {
       $this->scheme => [
         'driver' => 'ocfl',
         'config' => [
-          'root' => $this->_vfsRoot->url(),
+          'root' => $this->ocflRoot->url(),
           'id_prefix' => '',
         ],
       ],
@@ -54,19 +66,26 @@ class OCFLAdapterPluginTest extends KernelTestBase {
     /** @var \Drupal\Core\DrupalKernelInterface $kernel */
     $kernel = $this->container->get('kernel');
     $this->container = $kernel->rebuildContainer();
+
     /** @var \Drupal\Core\StreamWrapper\StreamWrapperManagerInterface $stream_wrapper_manager */
     $stream_wrapper_manager = $this->container->get('stream_wrapper_manager');
     $wrapper = $stream_wrapper_manager->getViaScheme($this->scheme);
     $stream_wrapper_manager->registerWrapper($this->scheme, get_class($wrapper), StreamWrapperInterface::READ);
   }
 
+  /**
+   * Test attempt to instantiate without a "root" specified.
+   */
   public function testMissingRoot() {
     $this->expectException(\InvalidArgumentException::class);
     OCFLAdapterPlugin::create($this->container, [], '', []);
   }
 
+  /**
+   * Test error state.
+   */
   public function testUnknownResourceResolution() {
-    $this->_vfsRoot = vfsStream::create([
+    $this->ocflRoot = vfsStream::create([
       'silly-object-id' => [
         '0=ocfl_object_1.0' => "ocfl_object_1.0\n",
         'inventory.json' => json_encode([
@@ -75,10 +94,10 @@ class OCFLAdapterPluginTest extends KernelTestBase {
             'v1' => [
               'state' => [],
             ],
-          ]
+          ],
         ]),
       ],
-    ], $this->_vfsRoot);
+    ], $this->ocflRoot);
 
     // XXX: Does not seem to match just one the "message", so... gonna leave
     // this like this, I guess?
@@ -88,9 +107,14 @@ class OCFLAdapterPluginTest extends KernelTestBase {
     file_exists("{$this->scheme}://silly-object-id");
   }
 
+  /**
+   * Test resolution from base inventory.
+   *
+   * @see https://wiki.lyrasis.org/display/FEDORA6x/Fedora+OCFL+Object+Structure
+   */
   public function testKnownResourceResolution() {
     $test_value = $this->randomMachineName();
-    $this->_vfsRoot = vfsStream::create([
+    $this->ocflRoot = vfsStream::create([
       'object-02' => [
         '0=ocfl_object_1.0' => "ocfl_object_1.0\n",
         'inventory.json' => json_encode([
@@ -113,8 +137,8 @@ class OCFLAdapterPluginTest extends KernelTestBase {
                 'yahash' => [
                   'our_file',
                 ],
-              ]
-            ]
+              ],
+            ],
           ],
         ]),
         'v1' => [
@@ -129,12 +153,18 @@ class OCFLAdapterPluginTest extends KernelTestBase {
           ],
         ],
       ],
-    ], $this->_vfsRoot);
+    ], $this->ocflRoot);
 
     $this->assertTrue(file_exists("{$this->scheme}://object-02"), 'FCRepo resource resolution seems to work.');
     $this->assertEquals($test_value, file_get_contents("{$this->scheme}://object-02"), 'FCRepo resource resolution found the value.');
   }
 
+  /**
+   * Test resource dereference via mutable head.
+   *
+   * @see https://ocfl.github.io/extensions/0005-mutable-head.html
+   * @see https://wiki.lyrasis.org/display/FEDORA6x/Fedora+OCFL+Object+Structure
+   */
   public function testKnownResourceViaMutableHeadResolution() {
     $test_value = $this->randomMachineName();
     $test_value2 = $this->randomMachineName();
@@ -161,17 +191,17 @@ class OCFLAdapterPluginTest extends KernelTestBase {
                 'yahash' => [
                   'our_file',
                 ],
-              ]
-            ]
+              ],
+            ],
           ],
         ]),
         'v1' => [
           'content' => [
             '.fcrepo' => [
               'fcr-root.json' => json_encode([
-            'interactionModel' => 'http://www.w3.org/ns/ldp#NonRDFSource',
-            'contentPath' => 'our_file',
-          ]),
+                'interactionModel' => 'http://www.w3.org/ns/ldp#NonRDFSource',
+                'contentPath' => 'our_file',
+              ]),
             ],
             'our_file' => $test_value,
           ],
@@ -240,7 +270,7 @@ class OCFLAdapterPluginTest extends KernelTestBase {
           ],
         ],
       ],
-    ], $this->_vfsRoot);
+    ], $this->ocflRoot);
 
     $this->assertTrue(file_exists("{$this->scheme}://object-02"), 'FCRepo resource resolution seems to work from mutable head.');
     $this->assertEquals($test_value2, file_get_contents("{$this->scheme}://object-02"), 'FCRepo resource resolution found the value from mutable head.');

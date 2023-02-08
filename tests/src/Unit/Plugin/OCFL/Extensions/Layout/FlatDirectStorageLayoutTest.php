@@ -5,6 +5,11 @@ namespace Drupal\Tests\flysystem_ocfl\Unit\Plugin\OCFL\Extensions\Layout;
 use Drupal\flysystem_ocfl\Plugin\OCFL\Extensions\Layout\FlatDirectStorageLayout;
 use Drupal\Tests\UnitTestCase;
 
+/**
+ * Test ID to path mapping for extension 0002.
+ *
+ * @see https://ocfl.github.io/extensions/0002-flat-direct-storage-layout.html
+ */
 class FlatDirectStorageLayoutTest extends UnitTestCase {
 
   /**
@@ -18,8 +23,11 @@ class FlatDirectStorageLayoutTest extends UnitTestCase {
   }
 
   /**
-   * @return array[]
-   *   Data provider for testing.
+   * Data provider for "example 1".
+   *
+   * In addition, random string passing through.
+   *
+   * @see https://ocfl.github.io/extensions/0002-flat-direct-storage-layout.html#example-1
    */
   public function dataProvider() {
     $config = [
@@ -31,6 +39,6 @@ class FlatDirectStorageLayoutTest extends UnitTestCase {
       [$config, '..hor_rib:lé-$id', '..hor_rib:lé-$id'],
       [$config, $other, $other],
     ];
-
   }
+
 }

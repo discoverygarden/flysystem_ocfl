@@ -9,8 +9,14 @@ use Drupal\flysystem_ocfl\Plugin\OCFL\Extensions\Layout\HashedTruncatedNTupleTre
 use Drupal\Tests\token\Kernel\KernelTestBase;
 use org\bovigo\vfs\vfsStream;
 
+/**
+ * Test base usage of the layout plugin manager.
+ */
 class OCFLLayoutManagerTest extends KernelTestBase {
 
+  /**
+   * {@inheritdoc}
+   */
   protected static $modules = [
     'flysystem_ocfl',
     'flysystem',
@@ -34,6 +40,8 @@ class OCFLLayoutManagerTest extends KernelTestBase {
   }
 
   /**
+   * Test loading and basic use of layout.
+   *
    * @dataProvider dataProvider
    */
   public function testLayoutLoad(array $structure, string $class, string $id, string $path) {
@@ -42,17 +50,24 @@ class OCFLLayoutManagerTest extends KernelTestBase {
 
     $root = vfsStream::setup('root', NULL, $structure);
 
-    // TODO: Target the config as the root.
+    // Target the config as the root.
     $layout = $manager->getLayout($root->url());
     $this->assertInstanceOf(OCFLLayoutInterface::class, $layout, 'Class has the expected interface.');
     $this->assertInstanceOf($class, $layout, 'Loaded the correct layout.');
 
-    // TODO: Ensure that the given ID gets maps to the given path.
+    // Ensure that the given ID gets maps to the given path.
     $this->assertEquals($path, $layout->mapToPath($id), 'ID mapped appropriately.');
   }
 
   /**
+   * Data provider.
+   *
    * @return array
+   *   An array of arrays, each containing:
+   *   - an array representing a vfs directory structure.
+   *   - a string identifying a target class
+   *   - a string representing an ID to map
+   *   - a string representing the path to which the ID should map.
    */
   public function dataProvider() {
     return [
@@ -65,7 +80,7 @@ class OCFLLayoutManagerTest extends KernelTestBase {
           '0=ocfl_1.0' => "ocfl_1.0\n",
           'silly-object-id' => [
             '0=ocfl_object_1.0' => "ocfl_object_1.0\n",
-          ]
+          ],
         ],
         FlatDirectStorageLayout::class,
         'silly-object-id',
@@ -106,7 +121,7 @@ class OCFLLayoutManagerTest extends KernelTestBase {
                 'extensionName' => '0003-hash-and-id-n-tuple-storage-layout',
                 'digestAlgorithm' => 'md5',
                 'tupleSize' => 2,
-                'numberOfTuples' => 15
+                'numberOfTuples' => 15,
               ]),
             ],
           ],
@@ -119,7 +134,8 @@ class OCFLLayoutManagerTest extends KernelTestBase {
         HashedTruncatedNTupleTreesWithObjectIDEncapsulatingDirectoryLayout::class,
         'object-01',
         'ff/75/53/44/92/48/5e/ab/b3/9f/86/35/67/28/88/object-01',
-      ]
+      ],
     ];
   }
+
 }
