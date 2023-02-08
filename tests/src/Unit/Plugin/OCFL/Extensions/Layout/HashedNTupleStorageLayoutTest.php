@@ -9,6 +9,8 @@ use Drupal\Tests\UnitTestCase;
  * Test ID to path mapping for extension 0004.
  *
  * @see https://ocfl.github.io/extensions/0004-hashed-n-tuple-storage-layout.html
+ *
+ * @group flysystem_ocfl
  */
 class HashedNTupleStorageLayoutTest extends UnitTestCase {
 

@@ -9,6 +9,8 @@ use Drupal\Tests\UnitTestCase;
 
 /**
  * Test the responses of the base locator implementation.
+ *
+ * @group flysystem_ocfl
  */
 class BaseLocatorTest extends UnitTestCase {
 

@@ -12,6 +12,8 @@ use org\bovigo\vfs\vfsStreamDirectory;
  * Locate "main" binary resource, as per FCRepo.
  *
  * @see https://wiki.lyrasis.org/display/FEDORA6x/Fedora+OCFL+Object+Structure#FedoraOCFLObjectStructure-FedoraAtomicResource-Binary
+ *
+ * @group flysystem_ocfl
  */
 class FCRepoResourceLocatorTest extends UnitTestCase {
 

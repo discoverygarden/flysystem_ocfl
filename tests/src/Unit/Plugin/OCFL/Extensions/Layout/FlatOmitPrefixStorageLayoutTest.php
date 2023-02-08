@@ -9,6 +9,8 @@ use Drupal\Tests\UnitTestCase;
  * Test ID to path mapping for extension 0006.
  *
  * @see https://ocfl.github.io/extensions/0006-flat-omit-prefix-storage-layout.html
+ *
+ * @group flysystem_ocfl
  */
 class FlatOmitPrefixStorageLayoutTest extends UnitTestCase {
 

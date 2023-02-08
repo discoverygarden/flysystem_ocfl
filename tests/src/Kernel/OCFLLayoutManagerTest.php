@@ -11,6 +11,8 @@ use org\bovigo\vfs\vfsStream;
 
 /**
  * Test base usage of the layout plugin manager.
+ *
+ * @group flysystem_ocfl
  */
 class OCFLLayoutManagerTest extends KernelTestBase {
 

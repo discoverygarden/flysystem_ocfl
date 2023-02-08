@@ -11,6 +11,8 @@ use org\bovigo\vfs\vfsStreamDirectory;
 
 /**
  * Test out adapter plugin instantiation.
+ *
+ * @group flysystem_ocfl
  */
 class OCFLAdapterPluginTest extends KernelTestBase {
 

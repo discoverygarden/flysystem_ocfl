@@ -11,6 +11,8 @@ use org\bovigo\vfs\vfsStream;
  * Test resolution of mutable head inventory.
  *
  * @see https://ocfl.github.io/extensions/0005-mutable-head.html
+ *
+ * @group flysystem_ocfl
  */
 class MutableHeadInventoryLocatorTest extends UnitTestCase {
 

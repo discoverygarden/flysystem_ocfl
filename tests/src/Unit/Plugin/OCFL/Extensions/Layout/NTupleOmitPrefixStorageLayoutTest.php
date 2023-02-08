@@ -9,6 +9,8 @@ use Drupal\Tests\UnitTestCase;
  * Test ID to path mapping for extension 0007.
  *
  * @see https://ocfl.github.io/extensions/0007-n-tuple-omit-prefix-storage-layout.html
+ *
+ * @group flysystem_ocfl
  */
 class NTupleOmitPrefixStorageLayoutTest extends UnitTestCase {
 

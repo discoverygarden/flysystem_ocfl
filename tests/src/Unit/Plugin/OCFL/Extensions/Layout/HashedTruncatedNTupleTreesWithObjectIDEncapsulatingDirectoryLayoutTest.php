@@ -9,6 +9,8 @@ use Drupal\Tests\UnitTestCase;
  * Test ID to path mapping for extension 0003.
  *
  * @see https://ocfl.github.io/extensions/0003-hash-and-id-n-tuple-storage-layout.html
+ *
+ * @group flysystem_ocfl
  */
 class HashedTruncatedNTupleTreesWithObjectIDEncapsulatingDirectoryLayoutTest extends UnitTestCase {
 
