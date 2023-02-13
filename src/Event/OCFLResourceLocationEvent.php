@@ -81,6 +81,9 @@ class OCFLResourceLocationEvent extends Event {
    *   The set resource path.
    */
   public function getResourcePath() : string {
+    if (!isset($this->resourcePath)) {
+      throw new \LogicException('Attempt to get resource path without it having been set.');
+    }
     return $this->resourcePath;
   }
 

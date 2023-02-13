@@ -2,6 +2,7 @@
 
 namespace Drupal\flysystem_ocfl\Flysystem;
 
+use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\flysystem\Plugin\FlysystemPluginInterface;
 use Drupal\flysystem\Plugin\FlysystemUrlTrait;
@@ -80,12 +81,20 @@ class OCFLAdapterPlugin implements FlysystemPluginInterface, ContainerFactoryPlu
     $issues = [];
 
     if (!is_dir($this->root)) {
-      $issues[] = "The target root does not appear to be a directory: {$this->root}";
+      $issues[] = [
+        'severity' => RfcLogLevel::WARNING,
+        'message' => 'The target root does not appear to be a directory: %root',
+        'context' => ['%root' => $this->root],
+      ];
       return $issues;
     }
 
     if (!$this->findToken()) {
-      $issues[] = "Failed to find OCFL storage Namaste token.";
+      $issues[] = [
+        'severity' => RfcLogLevel::WARNING,
+        'message' => 'Failed to find OCFL storage Namaste token in target root %root.',
+        'context' => ['%root' => $this->root],
+      ];
     }
 
     return $issues;

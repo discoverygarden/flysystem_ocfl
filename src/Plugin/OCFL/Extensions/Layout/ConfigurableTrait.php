@@ -91,4 +91,25 @@ trait ConfigurableTrait {
    */
   abstract public function getPluginId();
 
+  /**
+   * Load up our config.
+   *
+   * @param string $root
+   *   Path of the OCFL storage root.
+   *
+   * @return $this
+   *   The current instance.
+   *
+   * @see \Drupal\flysystem_ocfl\Plugin\OCFL\Extensions\Layout\ConfigurableInterface::loadConfiguration()
+   */
+  public function loadConfiguration(string $root) {
+    $extension = $this->getPluginId();
+    $extension_config_path = "{$root}/extensions/{$extension}/config.json";
+    assert(file_exists($extension_config_path));
+
+    $this->setConfiguration(json_decode(file_get_contents($extension_config_path), TRUE));
+
+    return $this;
+  }
+
 }

@@ -49,8 +49,11 @@ class OCFLInventoryLocationEvent extends Event {
    *   The path to a JSON file containing the inventory.
    */
   public function setInventoryByPath(string $path) : void {
+    assert(file_exists($path), 'The referenced inventory file exists.');
     $inventory_contents = file_get_contents($path);
-    $this->setInventory(json_decode($inventory_contents, TRUE));
+    $parsed = json_decode($inventory_contents, TRUE);
+    assert(is_array($parsed), 'The parsed manifest is an array.');
+    $this->setInventory($parsed);
   }
 
   /**
@@ -73,6 +76,9 @@ class OCFLInventoryLocationEvent extends Event {
    *   The inventory.
    */
   public function getInventory() : array {
+    if (!isset($this->inventory)) {
+      throw new \LogicException('Attempted to get inventory without it having been set.');
+    }
     return $this->inventory;
   }
 
