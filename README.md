@@ -1,6 +1,6 @@
 # Flysystem OCFL
 
-A [Flysystem]https://drupal-media.gitbooks.io/drupal8-guide/content/modules/flysystem/intro.html adapter implementation allowing access to within OCFL storage structures.
+A [Flysystem](https://www.drupal.org/project/flysystem) adapter implementation allowing access to within OCFL storage structures.
 
 Presently, targeting read-only access to binaries in [FCRepo 6 flavored storage](https://wiki.lyrasis.org/display/FEDORA6x/Fedora+OCFL+Object+Structure), especially via the lens of [Islandora](https://github.com/Islandora/islandora) which concerns primarily the storage of binaries.
 
