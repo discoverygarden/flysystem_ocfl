@@ -32,7 +32,7 @@ To support these multiple points of extensibility, we have defined:
 
 ## Usage
 
-This should offer a similar parallel to the `fedora` driver shipped with `islandora/islandora`, which might be configured in your Drupal site's `settings.php` with something like:
+This should offer a similar parallel to the `fedora` driver shipped with `islandora/islandora`, which might be configured via your Drupal site's `settings.php` with something like:
 
 ```json
 {
