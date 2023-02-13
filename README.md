@@ -1,6 +1,6 @@
 # Flysystem OCFL
 
-A Flysystem adapter implementation allowing access to within OCFL storage structures.
+A [Flysystem]https://drupal-media.gitbooks.io/drupal8-guide/content/modules/flysystem/intro.html adapter implementation allowing access to within OCFL storage structures.
 
 Presently, targeting read-only access to binaries in [FCRepo 6 flavored storage](https://wiki.lyrasis.org/display/FEDORA6x/Fedora+OCFL+Object+Structure), especially via the lens of [Islandora](https://github.com/Islandora/islandora) which concerns primarily the storage of binaries.
 
@@ -32,7 +32,7 @@ To support these multiple points of extensibility, we have defined:
 
 ## Usage
 
-This should offer a similar parallel to the `fedora` driver shipped with `islandora/islandora`, which might be configured with something like:
+This should offer a similar parallel to the `fedora` driver shipped with `islandora/islandora`, which might be configured in your Drupal site's `settings.php` with something like:
 
 ```json
 {
@@ -83,7 +83,9 @@ NOTE: An additional prefix within the bucket (`ocfl-root` in the example above, 
 
 ### Configuration
 
-There are presently just two points of configuration for the `ocfl` driver:
+See the [Flysystem module documentation](https://git.drupalcode.org/project/flysystem/-/blob/2.0.x/README.md#configuration) for more in-depth context on Flysystem adapter configuration.
+
+There are presently two points of configuration for the `ocfl` driver:
 
 | Key | Description | Default |
 | --- | --- | --- |
