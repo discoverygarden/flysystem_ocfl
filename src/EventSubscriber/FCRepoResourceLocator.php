@@ -106,7 +106,9 @@ class FCRepoResourceLocator implements EventSubscriberInterface {
     $fcrepo_manifest = json_decode(file_get_contents($this->getPathForHash($event, $fcrepo_manifest_hash)), TRUE);
     assert(array_key_exists('interactionModel', $fcrepo_manifest));
     assert($fcrepo_manifest['interactionModel'] === 'http://www.w3.org/ns/ldp#NonRDFSource');
-    assert(array_key_exists('contentPath', $fcrepo_manifest));
+    if (!array_key_exists('contentPath', $fcrepo_manifest)) {
+      return;
+    }
     $event->setResourcePath($this->getPathForName($event, $fcrepo_manifest['contentPath']));
   }
 
