@@ -170,4 +170,48 @@ class FCRepoResourceLocatorTest extends UnitTestCase {
     $this->locator->getResourceFromFcrepoManifest($this->mockEvent);
   }
 
+  /**
+   * Test that a fcrepo description without a contentPath skips out.
+   */
+  public function testManifestWithoutContentPath() : void {
+    vfsStream::create(array_merge_recursive($this->objectRootStructure, [
+      'v1' => [
+        'content' => [
+          '.fcrepo' => [
+            'fcr-root.json' => json_encode([
+              'interactionModel' => 'http://www.w3.org/ns/ldp#NonRDFSource',
+            ]),
+          ],
+        ],
+      ],
+    ]), $this->objectRoot);
+
+    $this->mockEvent->expects($this->never())
+      ->method('setResourcePath')
+      ->with($this->anything());
+
+    $this->mockEvent->expects($this->atLeastOnce())
+      ->method('getInventory')
+      ->with()
+      ->willReturn([
+        'head' => 'v1',
+        'manifest' => [
+          'asdf' => [
+            'v1/content/.fcrepo/fcr-root.json',
+          ],
+        ],
+        'versions' => [
+          'v1' => [
+            'state' => [
+              'asdf' => [
+                '.fcrepo/fcr-root.json',
+              ],
+            ],
+          ],
+        ],
+      ]);
+
+    $this->locator->getResourceFromFcrepoManifest($this->mockEvent);
+  }
+
 }
