@@ -101,3 +101,15 @@ Not strictly an issue with this module, but may rise relating to the use of non-
 
 - allow for fragments to be passed via Flysystem URIs, to be interpreted as different resources within a container object
   - no present use-case for this
+
+## Troubleshooting/Issues
+
+Having problems or solved a problem? Contact
+[discoverygarden](http://support.discoverygarden.ca).
+
+## Maintainers
+Current maintainers:
+* [discoverygarden](https://discoverygarden.ca/)
+
+## License
+[GPLv3](http://www.gnu.org/licenses/gpl-3.0.txt)
