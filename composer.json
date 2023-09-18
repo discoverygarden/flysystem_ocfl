@@ -1,6 +1,7 @@
 {
     "name": "discoverygarden/flysystem_ocfl",
     "type": "drupal-module",
+    "license": "GPL-3.0-or-later",
     "require": {
         "ext-json": "*",
         "drupal/flysystem": "^2"
