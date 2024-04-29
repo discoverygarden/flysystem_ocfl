@@ -107,9 +107,13 @@ Not strictly an issue with this module, but may rise relating to the use of non-
 Having problems or solved a problem? Contact
 [discoverygarden](http://support.discoverygarden.ca).
 
+## Sponsors
+* University of Limerick
+
 ## Maintainers
 Current maintainers:
-* [discoverygarden](https://discoverygarden.ca/)
+
+* [discoverygarden](http://www.discoverygarden.ca)
 
 ## License
 [GPLv3](http://www.gnu.org/licenses/gpl-3.0.txt)
