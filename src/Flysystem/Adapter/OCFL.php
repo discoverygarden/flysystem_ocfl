@@ -12,6 +12,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * OCFL flysystem adapter.
+ *
+ * @phpstan-consistent-constructor
  */
 class OCFL extends Local {
 

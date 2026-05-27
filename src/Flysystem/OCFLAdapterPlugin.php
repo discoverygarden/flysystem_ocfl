@@ -15,6 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @Adapter(
  *   id = "ocfl"
  * )
+ * @phpstan-consistent-constructor
  */
 class OCFLAdapterPlugin implements FlysystemPluginInterface, ContainerFactoryPluginInterface {
 
@@ -39,7 +40,7 @@ class OCFLAdapterPlugin implements FlysystemPluginInterface, ContainerFactoryPlu
    */
   public function __construct(
     string $root,
-    string $id_prefix
+    string $id_prefix,
   ) {
     $this->root = $root;
     $this->idPrefix = $id_prefix;
