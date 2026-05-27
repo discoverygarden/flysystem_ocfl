@@ -35,7 +35,7 @@ class OCFLResourceLocationEvent extends Event {
    */
   public function __construct(
     string $object_root,
-    array $inventory
+    array $inventory,
   ) {
     $this->objectRoot = $object_root;
     $this->inventory = $inventory;

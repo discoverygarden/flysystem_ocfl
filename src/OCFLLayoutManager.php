@@ -20,14 +20,14 @@ class OCFLLayoutManager extends DefaultPluginManager implements OCFLLayoutFactor
   public function __construct(
     \Traversable $namespaces,
     CacheBackendInterface $cache_backend,
-    ModuleHandlerInterface $module_handler
+    ModuleHandlerInterface $module_handler,
   ) {
     parent::__construct(
       "Plugin/OCFL/Extensions/Layout",
       $namespaces,
       $module_handler,
       OCFLLayoutInterface::class,
-      OCFLLayout::class
+      OCFLLayout::class,
     );
 
     $this->alterInfo('flysystem_ocfl_layout_info');

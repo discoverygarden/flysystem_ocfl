@@ -13,6 +13,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 /**
  * OCFL flysystem adapter.
  *
+ * phpcs:disable Drupal.NamingConventions.ValidClassName.NoUpperAcronyms
  * @phpstan-consistent-constructor
  */
 class OCFL extends Local {
